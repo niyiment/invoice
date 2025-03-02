@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=invoice'
+      - 'POSTGRES_PASSWORD=invoice'
+      - 'POSTGRES_USER=invoice'
+    ports:
+      - '5432'

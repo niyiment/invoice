@@ -52,8 +52,13 @@ public class CustomerServiceImpl implements CustomerService {
        existingCustomer.setName(request.getName());
        existingCustomer.setEmail(request.getEmail());
        existingCustomer.setPhone(request.getPhone());
-       existingCustomer.setBillingAddress(modelMapper.map(request.getBillingAddress(), Address.class));
-       existingCustomer.setShippingAddress(modelMapper.map(request.getShippingAddress(), Address.class));
+       if (request.getBillingAddress() != null) {
+           existingCustomer.setBillingAddress(modelMapper.map(request.getBillingAddress(), Address.class));
+       }
+       if (request.getShippingAddress() != null) {
+           existingCustomer.setShippingAddress(modelMapper.map(request.getShippingAddress(), Address.class));
+       }
+
        existingCustomer.setCustomerType(request.getCustomerType() != null ? request.getCustomerType() : CustomerType.INDIVIDUAL);
        existingCustomer.setNotes(request.getNotes());
        Customer updatedCustomer = customerRepository.save(existingCustomer);

@@ -21,7 +21,7 @@ public class CustomerRequest {
     private String email;
 
     @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "Phone number must be in international format (e.g., +2347567890)")
+    @Pattern(regexp = "^\\+[1-9]\\d{1,14}$", message = "Phone number must be in international format (e.g., +2347012345678)")
     private String phone;
     
     private AddressRequest billingAddress;

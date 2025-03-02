@@ -8,6 +8,10 @@ import com.niyiment.invoice.model.dto.response.CustomerSummaryResponse;
 import com.niyiment.invoice.model.entity.Address;
 import com.niyiment.invoice.model.entity.Customer;
 import com.niyiment.invoice.model.enums.CustomerType;
+import com.niyiment.invoice.report.dto.ReportData;
+import com.niyiment.invoice.report.dto.ReportRequest;
+import com.niyiment.invoice.report.dto.ReportResponse;
+import com.niyiment.invoice.report.service.ReportGeneratorService;
 import com.niyiment.invoice.repository.CustomerRepository;
 import com.niyiment.invoice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @Slf4j
@@ -28,9 +31,11 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
-    private CustomerRepository customerRepository;
-    private ModelMapper modelMapper;
+    private final CustomerRepository customerRepository;
+    private final ModelMapper modelMapper;
+    private final ReportGeneratorService reportGeneratorService;
     private static final String NOT_FOUND = "Customer not found with id: ";
+
 
     @Override
     public CustomerResponse createCustomer(CustomerRequest request) {
@@ -39,6 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
         Customer customer = modelMapper.map(request, Customer.class);
         customer.setCustomerNumber(generateCustomerNumber());
+
         Customer savedCustomer = customerRepository.save(customer);
 
         return modelMapper.map(savedCustomer, CustomerResponse.class);
@@ -104,8 +110,59 @@ public class CustomerServiceImpl implements CustomerService {
                 .map(customer -> modelMapper.map(customer, CustomerResponse.class));
     }
 
+    @Override
+    public ReportResponse generateCustomerReport(String format){
+        format = format.toLowerCase();
+        List<Customer> customers = customerRepository.findAll();
+
+        List<String> headers = Arrays.asList("Customer No.", "Name", "Email", "Phone", "Address", "Customer Type");
+
+        List<List<Object>> rows = new ArrayList<>();
+        for(Customer customer : customers) {
+            List<Object> row = Arrays.asList(
+                customer.getCustomerNumber(), customer.getName(), customer.getEmail(),
+                    customer.getPhone(), customer.getBillingAddress().getFormattedAddress(),
+                    customer.getCustomerType()
+            );
+            rows.add(row);
+        }
+
+        ReportData data = ReportData.builder()
+                .title("Customer Report")
+                .description("All customer details")
+                .headers(headers)
+                .rows(rows)
+                .build();
+
+        Map<String, Object> options = new HashMap<>();
+        options.put("author", "Invoice Management System");
+        options.put("fileName", "customer_report" + LocalDateTime.now().toLocalDate().toString());
+
+        if (format.equals("excel")) {
+            options.put("sheetName", "Customers");
+        } else if (format.equals("csv")) {
+            options.put("delimiter", ",");
+            options.put("includeMetadata", true);
+        } else if (format.equals("pdf")) {
+            options.put("subject", "Customer Report");
+            options.put("keywords", "customers, clients, report");
+        } else if (format.equals("json")) {
+            options.put("prettyPrint", true);
+        }
+
+        ReportRequest request = ReportRequest.builder()
+                .format(format)
+                .data(data)
+                .options(options)
+                .build();
+
+        return reportGeneratorService.generateReport(request);
+    }
+
     private String generateCustomerNumber() {
         long count = customerRepository.count() + 1;
         return "CUST-" + String.format("%06d", count);
     }
+
+
 }

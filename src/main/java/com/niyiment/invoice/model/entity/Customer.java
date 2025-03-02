@@ -4,7 +4,6 @@ package com.niyiment.invoice.model.entity;
 import com.niyiment.invoice.model.enums.CustomerType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import jakarta.persistence.*;
@@ -65,7 +64,10 @@ public class Customer extends BaseAuditEntity {
 
     @PrePersist
     @PreUpdate
-    public void normalizeEmail() {
+    public void update() {
         this.email = this.email.toLowerCase();
+        if (customerType == null) {
+            this.customerType = CustomerType.INDIVIDUAL;
+        }
     }
 }

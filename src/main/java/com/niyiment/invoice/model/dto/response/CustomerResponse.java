@@ -24,5 +24,5 @@ public class CustomerResponse extends BaseDTO {
     private String taxNumber;
     private CustomerType customerType;
     private String notes;
-    private List<InvoiceSummaryResponse> invoices;
+//    private List<InvoiceSummaryResponse> invoices;
 }

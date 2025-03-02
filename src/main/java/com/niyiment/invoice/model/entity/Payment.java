@@ -39,4 +39,5 @@ public class Payment extends BaseAuditEntity {
     @Column(name = "notes")
     private String notes;
 
+
 }

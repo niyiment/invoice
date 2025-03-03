@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: InvoiceManagement
+
+  datasource:
+    username: invoice
+    password: invoice
+    url: jdbc:postgresql://localhost:5432/invoice
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update

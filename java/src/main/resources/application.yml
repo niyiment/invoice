@@ -1,0 +1,35 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: invoice
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/invoice_db
+      auto-index-creation: true
+
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+      fail-on-unknown-properties: false
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    root: INFO
+    com.niyiment.invoice: DEBUG
+    org.springframework.data.mongodb: DEBUG
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui
+    operationsSorter: method
+    tagsSorter: alpha
+    display-request-duration: true

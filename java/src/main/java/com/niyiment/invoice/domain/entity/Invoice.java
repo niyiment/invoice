@@ -1,0 +1,104 @@
+package com.niyiment.invoice.domain.entity;
+
+
+import com.niyiment.invoice.domain.enums.InvoiceStatus;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Document
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Invoice {
+    @Id
+    private String id;
+
+    @Indexed(unique = true)
+    private String invoiceNumber;
+    private String customerName;
+    private String customerEmail;
+    private String customerAddress;
+    private List<InvoiceItem> items = new ArrayList<>();
+    private double subTotal;
+    private double taxRate;
+    private double taxAmount;
+    private double totalAmount;
+    private InvoiceStatus status = InvoiceStatus.DRAFT;
+    private String notes;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+    /**
+     * Calculatess the invoice subtotal by summing up all items amount
+     * @return the calculated subtotal
+     */
+    public double calculateSubTotal() {
+        subTotal = items.stream()
+                .mapToDouble(InvoiceItem::getAmount)
+                .sum();
+        return subTotal;
+    }
+
+    /**
+     * Calculates the invoice total amount by adding the subtotal and tax amount
+     * @return the calculated total amount
+     */
+    public double calculateTaxAmount() {
+        taxAmount = subTotal * (taxRate / 100);
+        return taxAmount;
+    }
+
+    /**
+     * Calculates the invoice total amount by adding the subtotal and tax amount
+     * @return the calculated total amount
+     */
+    public double calculateTotal() {
+        totalAmount = subTotal + taxAmount;
+        return totalAmount;
+    }
+
+    /**
+     * Recalculates the invoice subtotal, tax amount, and total amount
+     */
+    public void reCalculateAmount() {
+        calculateSubTotal();
+        calculateTaxAmount();
+        calculateTotal();
+    }
+
+    /**
+     * Adds an item to the invoice and recalculates amounts.
+     * @param invoiceItem to add
+     * @return the invoice instance
+     */
+    public Invoice addItem(InvoiceItem invoiceItem) {
+        items.add(invoiceItem);
+        reCalculateAmount();
+        return this;
+    }
+
+    /**
+     * Removes an item from the invoice and recalculates amounts.
+     * @param invoiceItem to remove
+     * @return the invoice instance
+     */
+    public Invoice removeItem(InvoiceItem invoiceItem) {
+        items.remove(invoiceItem);
+        reCalculateAmount();
+        return this;
+    }
+
+
+}

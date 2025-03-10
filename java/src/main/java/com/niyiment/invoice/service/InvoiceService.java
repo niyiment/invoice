@@ -1,6 +1,7 @@
 package com.niyiment.invoice.service;
 
 import com.niyiment.invoice.domain.dto.InvoiceDto;
+import com.niyiment.invoice.domain.entity.Invoice;
 import com.niyiment.invoice.domain.enums.InvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +18,11 @@ public interface InvoiceService {
     InvoiceDto updateInvoiceStatus(String id, InvoiceStatus invoiceStatus);
     void deleteInvoice(String id);
     Page<InvoiceDto> getInvoiceByCustomerEmail(String customerEmail, Pageable pageable);
-    Page<InvoiceDto> getInvoicesByDueDate(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+    Page<InvoiceDto> getInvoicesByDueDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
     Page<InvoiceDto> getOverdueInvoices(Pageable pageable);
-    Page<InvoiceDto> getInvoicesByTotalAmountRange(double minAmount, Pageable pageable);
+    Page<InvoiceDto> getInvoicesByTotalAmountGreaterThanEquals(double amount, Pageable pageable);
+    Page<InvoiceDto> getInvoicesByTotalAmountLessThanEquals(double amount, Pageable pageable);
+    Page<InvoiceDto> getInvoicesByStatus(InvoiceStatus status, Pageable pageable);
     List<InvoiceDto> advancedSearch(String customerName, InvoiceStatus invoiceStatus,
                                     LocalDateTime startDate, LocalDateTime endDate,
                                     Double minAmount, Double maxAmount);

@@ -5,9 +5,12 @@ import com.niyiment.invoice.domain.dto.InvoiceDto;
 import com.niyiment.invoice.domain.dto.InvoiceItemDto;
 import com.niyiment.invoice.domain.entity.Invoice;
 import com.niyiment.invoice.domain.entity.InvoiceItem;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+
+@Component
 public class InvoiceMapper {
     /**
      * Converts an Invoice entity to an InvoiceDto.

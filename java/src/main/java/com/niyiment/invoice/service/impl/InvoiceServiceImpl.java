@@ -121,7 +121,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InvoiceDto> getInvoicesByDueDate(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
+    public Page<InvoiceDto> getInvoicesByDueDateRange(LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         Page<Invoice> invoices = invoiceRepository.findByDueDateBetween(startDate, endDate, pageable);
 
         return invoices.map(invoiceMapper::toDto);
@@ -137,8 +137,24 @@ public class InvoiceServiceImpl implements InvoiceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<InvoiceDto> getInvoicesByTotalAmountRange(double amount, Pageable pageable) {
+    public Page<InvoiceDto> getInvoicesByTotalAmountGreaterThanEquals(double amount, Pageable pageable) {
         Page<Invoice> invoices = invoiceRepository.findByTotalAmountGreaterThanEqual(amount, pageable);
+
+        return invoices.map(invoiceMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<InvoiceDto> getInvoicesByTotalAmountLessThanEquals(double amount, Pageable pageable) {
+        Page<Invoice> invoices = invoiceRepository.findByTotalAmountLessThanEqual(amount, pageable);
+
+        return invoices.map(invoiceMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public  Page<InvoiceDto> getInvoicesByStatus(InvoiceStatus status, Pageable pageable) {
+        Page<Invoice> invoices = invoiceRepository.findByStatus(status, pageable);
 
         return invoices.map(invoiceMapper::toDto);
     }

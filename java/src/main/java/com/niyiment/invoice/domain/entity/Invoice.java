@@ -3,6 +3,7 @@ package com.niyiment.invoice.domain.entity;
 
 import com.niyiment.invoice.domain.enums.InvoiceStatus;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,10 +35,16 @@ public class Invoice {
     private double totalAmount;
     private InvoiceStatus status = InvoiceStatus.DRAFT;
     private String notes;
+    private LocalDateTime invoiceDate;
+    private LocalDateTime dueDate;
 
     @CreatedDate
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    public Invoice(@NotBlank(message = "Invoice number is required") String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
 
 
     /**

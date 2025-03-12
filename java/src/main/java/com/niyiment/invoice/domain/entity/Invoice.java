@@ -29,7 +29,7 @@ public class Invoice {
     private String customerEmail;
     private String customerAddress;
     private List<InvoiceItem> items = new ArrayList<>();
-    private double subTotal;
+    private double subtotal;
     private double taxRate;
     private double taxAmount;
     private double totalAmount;
@@ -51,11 +51,11 @@ public class Invoice {
      * Calculatess the invoice subtotal by summing up all items amount
      * @return the calculated subtotal
      */
-    public double calculateSubTotal() {
-        subTotal = items.stream()
+    public double calculateSubtotal() {
+        subtotal = items.stream()
                 .mapToDouble(InvoiceItem::getAmount)
                 .sum();
-        return subTotal;
+        return subtotal;
     }
 
     /**
@@ -63,7 +63,7 @@ public class Invoice {
      * @return the calculated total amount
      */
     public double calculateTaxAmount() {
-        taxAmount = subTotal * (taxRate / 100);
+        taxAmount = subtotal * (taxRate / 100);
         return taxAmount;
     }
 
@@ -72,7 +72,7 @@ public class Invoice {
      * @return the calculated total amount
      */
     public double calculateTotal() {
-        totalAmount = subTotal + taxAmount;
+        totalAmount = subtotal + taxAmount;
         return totalAmount;
     }
 
@@ -80,7 +80,7 @@ public class Invoice {
      * Recalculates the invoice subtotal, tax amount, and total amount
      */
     public void reCalculateAmount() {
-        calculateSubTotal();
+        calculateSubtotal();
         calculateTaxAmount();
         calculateTotal();
     }

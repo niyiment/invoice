@@ -1,6 +1,5 @@
 package com.niyiment.invoice.domain.dto;
 
-import com.niyiment.invoice.domain.entity.Invoice;
 import com.niyiment.invoice.domain.enums.InvoiceStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -36,7 +35,7 @@ public class InvoiceDto {
     @Size(min = 1, message = "At least one item is required")
     private List<InvoiceItemDto> items = new ArrayList<>();
 
-    private double subTotal;
+    private double subtotal;
 
     @Min(value = 0, message = "Tax rate cannot be negative")
     private double taxRate;

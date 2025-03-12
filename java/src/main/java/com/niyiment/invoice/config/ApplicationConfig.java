@@ -6,10 +6,13 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+
 import java.util.List;
 
 
 @Configuration
+@EnableMongoAuditing
 public class ApplicationConfig {
 
     @Bean
@@ -18,7 +21,7 @@ public class ApplicationConfig {
                 .info(new Info()
                         .title("Invoice Management API")
                         .version("1.0")
-                        .description("API documentation for managing invoices.")
+                        .description("REST API documentation for managing invoices.")
                         .contact(new Contact()
                                 .name("Support Team")
                                 .email("info@example.com")

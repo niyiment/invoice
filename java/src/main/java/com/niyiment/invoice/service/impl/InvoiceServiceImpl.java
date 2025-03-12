@@ -88,7 +88,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Transactional
     public InvoiceDto updateInvoiceStatus(String id, InvoiceStatus invoiceStatus) {
         Invoice existingInvoice = findInvoiceById(id);
-        if (existingInvoice.getStatus().canTransitionTo(invoiceStatus)) {
+        if (!existingInvoice.getStatus().canTransitionTo(invoiceStatus)) {
             throw new BadRequestException("Cannot transition from " + existingInvoice.getStatus() +
              " to " + invoiceStatus);
         }
@@ -173,7 +173,7 @@ public class InvoiceServiceImpl implements InvoiceService {
         String prefix = "INV-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
         List<Invoice> invoicesWithPrefix = invoiceRepository.findAll().stream()
                 .filter(inv -> inv.getInvoiceNumber().startsWith(prefix))
-                .collect(Collectors.toList());
+                .toList();
 
         int maxNumber = 0;
 
@@ -188,12 +188,14 @@ public class InvoiceServiceImpl implements InvoiceService {
                 log.error("Invoice number {}", invoice.getInvoiceNumber());
             }
         }
+        System.out.println(maxNumber);
+        System.out.println(String.format("%s-%03d", prefix, maxNumber + 1));
 
         return String.format("%s-%03d", prefix, maxNumber + 1);
     }
 
     private Invoice findInvoiceById(String id) {
         return invoiceRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invoice not found with id: " + id));
+                .orElseThrow(() -> new InvoiceNotFoundException("Invoice not found with id: " + id));
     }
 }

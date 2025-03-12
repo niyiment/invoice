@@ -35,7 +35,7 @@ public class InvoiceMapper {
                 .map(this::toItemDto)
                 .collect(Collectors.toList()));
 
-        dto.setSubTotal(invoice.getSubTotal());
+        dto.setSubtotal(invoice.getSubtotal());
         dto.setTaxRate(invoice.getTaxRate());
         dto.setTaxAmount(invoice.getTaxAmount());
         dto.setTotalAmount(invoice.getTotalAmount());

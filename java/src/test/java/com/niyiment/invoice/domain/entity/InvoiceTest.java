@@ -56,7 +56,7 @@ class InvoiceTest {
         invoice.addItem(invoiceItem1);
         invoice.addItem(invoiceItem2);
         invoice.setTaxRate(10.0);
-        invoice.ca();
+        invoice.calculateSubtotal();
         invoice.calculateTaxAmount();
         double total = invoice.calculateTotal();
 

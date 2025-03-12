@@ -6,12 +6,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class InvoiceDto {
     private String id;
 
@@ -44,5 +46,16 @@ public class InvoiceDto {
     private double totalAmount;
     private InvoiceStatus status;
     private String notes;
+
+
+    public InvoiceDto(String id, String customerName, InvoiceStatus status, Double totalAmount,
+                      LocalDateTime invoiceDate, LocalDateTime dueDate) {
+        this.id = id;
+        this.customerName = customerName;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.invoiceDate = invoiceDate;
+        this.dueDate = dueDate;
+    }
 
 }

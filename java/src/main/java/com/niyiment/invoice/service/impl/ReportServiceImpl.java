@@ -294,7 +294,7 @@ public class ReportServiceImpl implements ReportService {
 
                 PdfPTable table = new PdfPTable(4);
                 table.setWidthPercentage(100);
-                table.setWidths(new float[] {4, 1, 2, 2});
+                table.setWidths(new float[] {4, 2, 2, 2});
 
                 Stream.of("Description", "Quantity", "Unit Price", "Amount")
                         .forEach(columnTitle -> {
